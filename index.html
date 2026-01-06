@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Anime RPG</title>
+<style>
+  body {
+    margin: 0;
+    font-family: sans-serif;
+    background: #111;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  #gameArea {
+    width: 640px;
+    height: 360px;
+    background: #222 url('https://i.imgur.com/UYiroysl.jpg') no-repeat center center;
+    background-size: cover;
+    border: 2px solid #0f0;
+    position: relative;
+    margin-top: 20px;
+    overflow: hidden;
+  }
+  #bottomPanel {
+    width: 640px;
+    height: 60px;
+    background: #333;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 10px;
+    border-radius: 5px;
+  }
+  .button {
+    padding: 5px 10px;
+    background: #0f0;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  .button.disabled {
+    background: #555;
+    cursor: not-allowed;
+  }
+  .character, .monster {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+  }
+</style>
+</head>
+<body>
+
+<h2>Anime RPG</h2>
+
+<div id="gameArea">
+  <!-- Персонаж -->
+  <img id="player" class="character" src="https://i.imgur.com/8Km9tLL.png" style="bottom:10px; left:50px;">
+</div>
+
+<div id="bottomPanel">
+  <div class="button" id="shop">Магазин (VIP скоро)</div>
+  <div class="button" id="quests">Задания</div>
+  <div class="button" id="equip">Экипировка</div>
+  <div class="button" id="start">Start</div>
+</div>
+
+<script>
+  const gameArea = document.getElementById('gameArea');
+  const startBtn = document.getElementById('start');
+
+  const monsters = [
+    {name: 'Гоблин', src: 'https://i.imgur.com/NH1F6Jp.png'},
+    {name: 'Вампир', src: 'https://i.imgur.com/jx2Q1gJ.png'}
+  ];
+
+  let monsterEl = null;
+  let bossEl = null;
+
+  function spawnMonster() {
+    if(monsterEl) monsterEl.remove();
+    const m = monsters[Math.floor(Math.random()*monsters.length)];
+    monsterEl = document.createElement('img');
+    monsterEl.src = m.src;
+    monsterEl.className = 'monster';
+    monsterEl.style.top = Math.random()*200 + 'px';
+    monsterEl.style.left = Math.random()*500 + 'px';
+    gameArea.appendChild(monsterEl);
+  }
+
+  function spawnBoss() {
+    if(monsterEl) monsterEl.remove();
+    bossEl = document.createElement('img');
+    bossEl.src = 'https://i.imgur.com/4AiXzf8.png'; // простой босс
+    bossEl.className = 'monster';
+    bossEl.style.top = '100px';
+    bossEl.style.left = '250px';
+    gameArea.appendChild(bossEl);
+    alert('Босс появился!');
+  }
+
+  startBtn.onclick = () => {
+    alert('Бой начинается!');
+    spawnMonster();
+    // Монстры каждые 15 секунд
+    const monsterInterval = setInterval(spawnMonster, 15000);
+    // Босс через 3 минуты
+    setTimeout(() => {
+      clearInterval(monsterInterval);
+      spawnBoss();
+    }, 180000);
+  };
+</script>
+
+</body>
+  </html>
